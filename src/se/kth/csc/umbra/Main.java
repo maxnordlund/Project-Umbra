@@ -43,11 +43,6 @@ public final class Main implements Runnable {
 	 *            Arguments from the command line.
 	 */
 	public static void main(String[] args) {
-		/*if (args.length < 1) {
-			System.out.println(USAGE);
-			System.exit(0);
-		}*/
-
 		JFrame frame = new JFrame("This is Umbra");
 		Container contentPane = frame.getContentPane();
 
