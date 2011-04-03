@@ -30,20 +30,25 @@ import javax.swing.event.*;
  * @author Max Nordlund
  * @version 2011.04.01
  */
-public final class Main {
+public final class Main implements Runnable {
 	private static final String USAGE = "Project-Umbra path";
+
+	@Override
+	public void run() {
+		Main.main(new String[0]);
+	}
 
 	/**
 	 * @param args
 	 *            Arguments from the command line.
 	 */
 	public static void main(String[] args) {
-		if (args.length < 1) {
+		/*if (args.length < 1) {
 			System.out.println(USAGE);
 			System.exit(0);
-		}
+		}*/
 
-		JFrame frame = new JFrame("This is a test");
+		JFrame frame = new JFrame("This is Umbra");
 		Container contentPane = frame.getContentPane();
 
 		JTextArea text = new JTextArea();
