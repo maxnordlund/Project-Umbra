@@ -1,0 +1,105 @@
+\documentclass[a4paper,11p,twoside]{report}
+
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{\bfseries Project Umbra}
+\cfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\title{Project Umbra}
+\author{Max Nordlund\\ maxno@kth.se \\ \\ Oskar Segersvärd \\ oskarseg@kth.se}
+
+\setcounter{secnumdepth}{1}
+\setcounter{chapter}{1}
+
+\begin{document}
+\maketitle
+
+\pagebreak
+
+\section{Programbeskrivning}
+\subsection{Basversion}
+Programmet skall:
+\begin{itemize}
+	\item redigera text skriven vertikalt i kolumner från vänster till höger.
+	\item skapa nytt, spara och ladda dokument i rent textformat.
+\end{itemize}
+I praktiken skall man alltså kunna skriva mycket enkla stycken text i programmet och spara dessa.
+
+\subsection{Avanceradversion}
+Den avancerad version av programmet skall även:
+\begin{itemize}
+	\item kalla på pdf\LaTeX, om sådant finns installerat på datorn, för att kunna göra en pdf av den aktiva filen.
+	\item anpassas till språket Mhasira, med en egen gjord font.
+	\item anpassas för mongoliska skriftspråket Hudam.
+\end{itemize}
+Som användare av den avancerade versionen skall man således kunna se texten man skriver med rätt font samt kunna göra en pdf av sitt dokument för att kunna skriva ut detta.
+
+\section{Användarbeskrivning}
+\subsection{Basversion}
+Programmet kommer användas av linguister och lajvare. Användaren förväntas ha viss datorvana, som till exempel att skriva dokument i Word/Notepad. Vi antar även att de har kännedom om språket i fråga. De bör även ha grundläggande förståelse för det arabiska skriftsystemet. 
+
+\subsection{Avanceradversion}
+Programmet kommer dessutom användas av mongoler.
+
+Användaren kommer istället för grundläggande förståelse för arabisk skrift ha förståelse för det alfabet som språket Mhasira använder sig av.
+
+\section{Användarscenarier}
+\subsection{Basversion}
+
+
+\subsection{Avanceradversion}
+
+
+\section{Testplan}
+\subsection{Basversion}
+
+\subsection{Avanceradversion}
+
+\section{Programdesign}
+\subsection{Basversion}
+Längst upp i hierarkin finns en minimalistisk Main-klass som initierar programmet.
+
+
+\subsection{Avanceradversion}
+
+\section{Tekniskafrågor}
+\subsection{Basversion}
+För att kunna visa texten i vertikala kolummner från höger till vänster är alternativen att:
+Använda det arabiska alfabetet, som är skrivet från höger till vänster, och vrida texten ett kvarts varv åt vänster. Detta skulle kunna göras genom att använda en buffert mellan skärmen och textarean. Först ritar textarean till bufferten och sedan vridar man den för att till slut visa den på skärmen.
+
+Det innebär att man måste översätta all musinteraktion mellan skärmen och textarean då koordinaterna blir fel annars.
+
+Oavsett måste alla tangenttryckningar översättas till exempel från \emph{a} till \emph{$\clubsuit$}. Till detta kommer nog en keymap användas.
+
+\subsection{Avanceradversion}
+För att kunna visa text i en Mhasira font kommer en sådan att skapas, och då det arabiska alfabetet används för att kunna skriva texten, kommer denna nya font att behöva vara baserad på just detta. Att göra en arabisk font kan utgöra en tröskel.
+
+För den mongoliska Hudam implementationen ...
+
+\section{Arbetsplan}
+\subsection{Basversion}
+Efter den första veckan skall texten vara korrekt roterad och filer skall kunna skapas, sparas och laddas.
+
+Vid slutet av den andra veckan skall tangentbords och mus-events vara bundna till rätt funktioner i programmet.
+
+Vid 
+
+
+\subsection{Avanceradversion}
+
+Till andra veckan skall text kunna visas i Mhasira fonten i programmet.
+
+Till sista veckan skall den slutgiltiga versionen av Mhasira fonten vara färdigställd.
+
+
+\end{document}

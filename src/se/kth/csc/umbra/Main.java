@@ -45,6 +45,7 @@ public final class Main implements Runnable {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Project Umbra");
 		JTextArea text = new JTextArea();
+//		text.setAlignment(JTextArea.RIGHT_ALIGNMENT);
 		
 		Container contentPane = new JScrollPane(text);
 		frame.setContentPane(contentPane);
@@ -60,7 +61,7 @@ public final class Main implements Runnable {
 	/**
 	 * @param frame
 	 */
-	private static void makeMenuBar(JFrame frame) {
+	private static void makeMenuBar(final JFrame frame) {
 		JMenuBar menubar = new JMenuBar();
 		frame.setJMenuBar(menubar);
 
@@ -80,6 +81,7 @@ public final class Main implements Runnable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Open-file event
+				System.out.println("Open");
 			}
 		});
 		menubar.add(open);
@@ -90,9 +92,24 @@ public final class Main implements Runnable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Save-file event
+				System.out.println("Save");
 			}
 		});
 		menubar.add(save);
+		
+//		JButton help = makeButton("help.png", "[H]");
+//		save.setToolTipText("Shows the help dialog.");
+//		save.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				StringBuilder sb = new StringBuilder("Is your computer unable to export to pdf?");
+//				String s = sb.toString();
+//				JOptionPane.showMessageDialog(frame, s);
+//
+//				// TODO Help event
+//			}
+//		});
+//		menubar.add(help);
 	}
 
 	/**
@@ -108,32 +125,6 @@ public final class Main implements Runnable {
 	 */
 	private static JButton makeButton(String path, String desc) {
 		Icon icon = null;
-		InputStream input = null;
-		try {
-			input = new FileInputStream("./" + path);
-			icon = readIcon(input);
-		} catch (FileNotFoundException e) {
-			input = Main.class.getResourceAsStream("/" + path);
-			try {
-				icon = readIcon(input);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (input != null) {
-					input.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (icon == null) {
-			return new JButton(desc);
-		}
-		return new JButton(icon);
 	}
 
 	/**
