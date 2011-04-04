@@ -43,12 +43,12 @@ public final class Main implements Runnable {
 	 *            Arguments from the command line.
 	 */
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("This is Umbra");
-		Container contentPane = frame.getContentPane();
-
+		JFrame frame = new JFrame("Project Umbra");
 		JTextArea text = new JTextArea();
-		contentPane.add(text);
-
+		
+		Container contentPane = new JScrollPane(text);
+		frame.setContentPane(contentPane);
+		
 		makeMenuBar(frame);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,29 +64,32 @@ public final class Main implements Runnable {
 		JMenuBar menubar = new JMenuBar();
 		frame.setJMenuBar(menubar);
 
-		JButton newFile = makeButton("newFile", "[N]");
+		JButton newFile = makeButton("newFile.png", "[N]");
 		newFile.setToolTipText("Creates a new document.");
 		newFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO New-file event
 			}
 		});
 		menubar.add(newFile);
 
-		JButton open = makeButton("open", "[O]");
+		JButton open = makeButton("open.png", "[O]");
 		open.setToolTipText("Open a document.");
 		open.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Open-file event
 			}
 		});
 		menubar.add(open);
 
-		JButton save = makeButton("save", "[S]");
+		JButton save = makeButton("save.png", "[S]");
 		save.setToolTipText("Save the current document.");
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Save-file event
 			}
 		});
 		menubar.add(save);
@@ -107,10 +110,10 @@ public final class Main implements Runnable {
 		Icon icon = null;
 		InputStream input = null;
 		try {
-			input = new FileInputStream("./" + path + ".png");
+			input = new FileInputStream("./" + path);
 			icon = readIcon(input);
 		} catch (FileNotFoundException e) {
-			input = Main.class.getResourceAsStream("/" + path + ".png");
+			input = Main.class.getResourceAsStream("/" + path);
 			try {
 				icon = readIcon(input);
 			} catch (IOException e1) {
