@@ -9,7 +9,7 @@
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="bin"/>
-        	<fileset dir="img"></fileset>
+        	<fileset dir="img"/>
         </jar>
     </target>
 </project>
