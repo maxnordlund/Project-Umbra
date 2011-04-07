@@ -41,6 +41,8 @@ Den avancerad version av programmet skall även:
 	\item kalla på pdf\LaTeX, om sådant finns installerat på datorn, för att kunna göra en pdf av den aktiva filen.
 	\item anpassas till språket Mhasira, med en egen gjord font.
 	\item anpassas för mongoliska skriftspråket Hudam.
+	\item bättre användning av fokus. Det vill säga, texten skall vara korrekt markerad före och efter sparning.
+	\item ha möjlighet att välja mellan mongoliska och mhasira som input, med översatta tooltips för mongoliska.
 \end{itemize}
 Som användare av den avancerade versionen skall man således kunna se texten man skriver med rätt font samt kunna göra en pdf av sitt dokument för att kunna skriva ut detta.
 
@@ -49,25 +51,44 @@ Som användare av den avancerade versionen skall man således kunna se texten ma
 Programmet kommer användas av linguister och lajvare. Användaren förväntas ha viss datorvana, som till exempel att skriva dokument i Word/Notepad. Vi antar även att de har kännedom om språket i fråga. De bör även ha grundläggande förståelse för det arabiska skriftsystemet. 
 
 \subsection{Avanceradversion}
-Programmet kommer dessutom användas av mongoler.
+Användaren kommer istället för grundläggande förståelse för arabisk skrift ha förståelse för det alfabet som språket mhasira använder sig av.
 
-Användaren kommer istället för grundläggande förståelse för arabisk skrift ha förståelse för det alfabet som språket Mhasira använder sig av.
+Programmet kommer dessutom kunna användas av mongoler då man skall kunna skriva mongoliska tecken.
 
 \section{Användarscenarier}
 \subsection{Basversion}
+Starta-applikationen: 3 varianter :
+Kommandotolk (bas), Kommandotolk (fil-path), Dubbel-klicka
 
+Då användaren startar programmet kommer den mötas av en knapprad, och en tom skrivyta. Om en sparad fil öppnades i samband med start, kommer filens innehåll att visas i skrivytan.
+
+När användaren trycker på \emph{nytt}-knappen kommer ett nytt fönster med en tom textyta att öppnas. 
+
+När användaren trycker på \emph{öppna}-knappen kommer en dialog upp där användaren kan välja vilken fil som skall öppnas. Denna kommer att visas i textytan om denna är full, annars kommer ett nytt fönster att öppnas med den nya filen.
+
+När användaren trycker på \emph{spara}-knappen kommer en dialog där användaren kan välja till vilken fil texten skall sparas. Textytans innehåll kommer sendan att sparas till den filen. Om användaren redan valt en fil att spara till, kommer texten att sparas till den istället, utan visad dialog.
+
+När användaren trycker in en serie knappar kommer de tecken dessa är bundna till att uppenbara sig där markören är, varpå markören förflyttar sig nedåt. Notera att markören är av arabiskt ursprung. När textremsan nåt textytans nedrekant kommer det senastskrivna ordet att flytta till kolumnen till höger. Då användaren trycker på \emph{enter}-tangenten kommer all text som står nedanför markören att flyttas till en ny kolumn till höger. Om ingen text nedanför markören finns kommer helt enkelt en ny kolumn att bildas.
 
 \subsection{Avanceradversion}
+I den avancerade versionen kommer yttligare två knappar finnas tilgängliga; \emph{exportera} och \emph{inställningar}. Då användaren trycker på \emph{exportera}-knappen och filen inte är sparad, kommer spar-dialogen först att dyka upp. Om filen är sparad kommer en ny pdf-fil att placeras i samma mapp som text filen.
 
+När användaren trycker på \emph{inställningar}-knappen kommer en dialog där användaren kan välja mellan alla inställningar programmet har att erbjuda. Där kommer användaren med en enkel knapptryckning att kunna välja mellan mongoliska och mhasira. Även andra inställningar för programmet finns här.
+
+Markören skall befinna sig på samma plats i textytan före som efter eventuella knapptrykningar. Med andra ord, varje instans av programmet skall hålla koll på var markören finns i textstycket.
 
 \section{Testplan}
-\subsection{Basversion}
+JUnit tester för allt icke-privat. Säkra korrekt funktion. Hur? Enhetstester.
 
-\subsection{Avanceradversion}
+Simulera mus och tangentbords input.
+
+Testa lägga till och ta bort text. Lägga till/ta bort rader. Etc.
+
+Användartester baserade på ovanstående scenarion.
 
 \section{Programdesign}
 \subsection{Basversion}
-Längst upp i hierarkin finns en minimalistisk Main-klass som initierar programmet.
+Längst upp i hierarkin finns en minimalistisk Controler-klass med \emph{main}-metod som initierar programmet, och fungerar som en \emph{Controler} kan förväntas fungera i ett MVC baserat system.
 
 
 \subsection{Avanceradversion}
@@ -79,12 +100,12 @@ Använda det arabiska alfabetet, som är skrivet från höger till vänster, och
 
 Det innebär att man måste översätta all musinteraktion mellan skärmen och textarean då koordinaterna blir fel annars.
 
-Oavsett måste alla tangenttryckningar översättas till exempel från \emph{a} till \emph{$\clubsuit$}. Till detta kommer nog en keymap användas.
+Oavsett måste alla tangenttryckningar översättas till exempel från \emph{a} till \emph{$\clubsuit$}. 
 
 \subsection{Avanceradversion}
 För att kunna visa text i en Mhasira font kommer en sådan att skapas, och då det arabiska alfabetet används för att kunna skriva texten, kommer denna nya font att behöva vara baserad på just detta. Att göra en arabisk font kan utgöra en tröskel.
 
-För den mongoliska Hudam implementationen ...
+För den mongoliska Hudam implementationen?
 
 \section{Arbetsplan}
 \subsection{Basversion}
@@ -101,5 +122,7 @@ Till andra veckan skall text kunna visas i Mhasira fonten i programmet.
 
 Till sista veckan skall den slutgiltiga versionen av Mhasira fonten vara färdigställd.
 
+
+\suectio
 
 \end{document}
