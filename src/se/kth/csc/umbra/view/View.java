@@ -1,6 +1,6 @@
-package se.kth.csc.umbra;
+package se.kth.csc.umbra.view;
 
-import static se.kth.csc.umbra.model.File.*;
+import static se.kth.csc.umbra.model.FileUtil.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +18,7 @@ import se.kth.csc.umbra.model.FileInputAction;
  * @author Max Nordlund
  * 
  */
-class View {
+public class View {
 	private JFrame frame;
 	private JTextArea text;
 
@@ -36,7 +36,7 @@ class View {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	void show() {
+	public void show() {
 		frame.pack();
 		frame.setBounds(50, 50, 300, 500);
 		frame.setVisible(true);

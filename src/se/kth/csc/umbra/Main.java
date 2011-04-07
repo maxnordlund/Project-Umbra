@@ -11,6 +11,8 @@
  */
 package se.kth.csc.umbra;
 
+import se.kth.csc.umbra.view.View;
+
 /**
  * This class is responsible for setting up the object graph and starting the
  * application.

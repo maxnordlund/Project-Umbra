@@ -4,19 +4,19 @@ import java.io.*;
 
 import se.kth.csc.umbra.Main;
 
-public class File {
+public class FileUtil {
 
-	public File() {
+	public FileUtil() {
 
 	}
 
-	public static String Open(File file) {
+	public static String Open(FileUtil file) {
 
 		return null;
 
 	}
 
-	public static String Save(File file) {
+	public static String Save(FileUtil file) {
 
 		return null;
 	}
