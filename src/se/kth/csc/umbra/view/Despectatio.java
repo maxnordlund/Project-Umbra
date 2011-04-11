@@ -1,6 +1,6 @@
 package se.kth.csc.umbra.view;
 
-import static se.kth.csc.umbra.model.FileManager.*;
+import static se.kth.csc.umbra.model.LimaProcurator.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,32 +12,33 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import se.kth.csc.umbra.model.FileInputAction;
-import se.kth.csc.umbra.model.FileManager;
+import se.kth.csc.umbra.model.LimaInputiActio;
+import se.kth.csc.umbra.model.LimaProcurator;
 
 /**
  * @author Max Nordlund
  * 
  */
-public class View {
+public class Despectatio {
 	private JFrame frame;
 	private JTextArea text;
-	private FileManager saveFile;
+	private LimaProcurator saveFile;
 
-	public View(FileManager fileManager) {
-		this.saveFile = fileManager;
+	public Despectatio(LimaProcurator limaProcurator) {
+		this.saveFile = limaProcurator;
 
 		text = new JTextArea(5, 5);
 		text.setLineWrap(true);
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-
+		text.setUI(new UmbraIllusio());
+		
 		final JScrollPane scroll = new JScrollPane(text);
 
 		final Dimension preferredSize = new Dimension(300, 200);
 		final JMenuBar menubar = makeMenuBar();
 
-		frame = new JFrame("Project Umbra");
+		frame = new JFrame("Proposit Umbra");
 		frame.setPreferredSize(preferredSize);
 		frame.setMinimumSize(preferredSize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +128,7 @@ public class View {
 
 	private static JButton makeButton(String path, String desc, String tooltip,
 			ActionListener listner) {
-		Icon icon = (Icon) getResource(path, new FileInputAction() {
+		Icon icon = (Icon) getResource(path, new LimaInputiActio() {
 			@Override
 			public Object act(InputStream input) throws IOException {
 				Icon icon = null;

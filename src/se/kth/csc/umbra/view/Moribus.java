@@ -1,10 +1,10 @@
-package se.kth.csc.umbra.model;
+package se.kth.csc.umbra.view;
 
 import java.awt.event.KeyEvent;
 
-public class KeyMapper{
+public class Moribus{
 
-	public KeyMapper(){
+	public Moribus(){
 		
 	}
 		

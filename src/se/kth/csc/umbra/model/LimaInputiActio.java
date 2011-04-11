@@ -7,6 +7,6 @@ import java.io.InputStream;
  * @author Max Nordlund
  *
  */
-public interface FileInputAction {
+public interface LimaInputiActio {
 	Object act(InputStream input) throws IOException;
 }

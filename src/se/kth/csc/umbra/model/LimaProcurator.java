@@ -17,14 +17,14 @@ import se.kth.csc.umbra.Main;
  * @author Max Nordlund
  * @version 2011.04.09
  */
-public class FileManager {
+public class LimaProcurator {
 	private File location;
 	
-	public FileManager() {
+	public LimaProcurator() {
 		this.location = null;
 	}
 
-	public FileManager(String path) {
+	public LimaProcurator(String path) {
 		this.location = new File(path);
 	}
 
@@ -117,7 +117,7 @@ public class FileManager {
 	 * @return An object from the supplied action using the file from the
 	 *         supplied path.
 	 */
-	public static Object getResource(String path, FileInputAction action) {
+	public static Object getResource(String path, LimaInputiActio action) {
 		InputStream input = null;
 		Object returnObject = null;
 		try {

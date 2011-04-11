@@ -13,8 +13,8 @@ package se.kth.csc.umbra;
 
 import javax.swing.SwingUtilities;
 
-import se.kth.csc.umbra.model.FileManager;
-import se.kth.csc.umbra.view.View;
+import se.kth.csc.umbra.model.LimaProcurator;
+import se.kth.csc.umbra.view.Despectatio;
 
 /**
  * This class is responsible for setting up the object graph and starting the
@@ -27,12 +27,12 @@ import se.kth.csc.umbra.view.View;
 public final class Main implements Runnable {
 	@SuppressWarnings("unused")
 	private static final String USAGE = "Project-Umbra path";
-	private FileManager file;
-	private View frame;
+	private LimaProcurator file;
+	private Despectatio frame;
 
-	private Main(FileManager file) {
+	private Main(LimaProcurator file) {
 		this.file = file;
-		this.frame = new View(this.file);
+		this.frame = new Despectatio(this.file);
 	}
 
 	/**
@@ -49,11 +49,11 @@ public final class Main implements Runnable {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		FileManager file;
+		LimaProcurator file;
 		if (args.length == 0) {
-			file = new FileManager();
+			file = new LimaProcurator();
 		} else {
-			file = new FileManager(args[0]);
+			file = new LimaProcurator(args[0]);
 		}
 		SwingUtilities.invokeLater(new Main(file));
 	}
