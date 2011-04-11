@@ -11,6 +11,9 @@
  */
 package se.kth.csc.umbra;
 
+import javax.swing.SwingUtilities;
+
+import se.kth.csc.umbra.model.FileManager;
 import se.kth.csc.umbra.view.View;
 
 /**
@@ -24,22 +27,34 @@ import se.kth.csc.umbra.view.View;
 public final class Main implements Runnable {
 	@SuppressWarnings("unused")
 	private static final String USAGE = "Project-Umbra path";
+	private FileManager file;
+	private View frame;
 
+	private Main(FileManager file) {
+		this.file = file;
+		this.frame = new View(this.file);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
-		start();
+		frame.setVisible(true);
 	}
 
 	/**
 	 * @param args
-	 *            Arguments from the command line.
 	 */
 	public static void main(String[] args) {
-		start();
-	}
-	
-	private static void start() {
-		View view = new View();
-		view.show();
+		FileManager file;
+		if (args.length == 0) {
+			file = new FileManager();
+		} else {
+			file = new FileManager(args[0]);
+		}
+		SwingUtilities.invokeLater(new Main(file));
 	}
 }

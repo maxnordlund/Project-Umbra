@@ -1,6 +1,6 @@
 package se.kth.csc.umbra.view;
 
-import static se.kth.csc.umbra.model.FileUtil.*;
+import static se.kth.csc.umbra.model.FileManager.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import se.kth.csc.umbra.model.FileInputAction;
+import se.kth.csc.umbra.model.FileManager;
 
 /**
  * @author Max Nordlund
@@ -21,104 +22,85 @@ import se.kth.csc.umbra.model.FileInputAction;
 public class View {
 	private JFrame frame;
 	private JTextArea text;
+	private FileManager saveFile;
 
-	public View() {
-		frame = new JFrame("Project Umbra");
-		text = new JTextArea();
+	public View(FileManager fileManager) {
+		this.saveFile = fileManager;
+
+		text = new JTextArea(5, 5);
+		text.setLineWrap(true);
+		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 
-		Container contentPane = new JScrollPane(text);
-		frame.setContentPane(contentPane);
+		final JScrollPane scroll = new JScrollPane(text);
 
-		JMenuBar menubar = makeMenuBar();
-		frame.setJMenuBar(menubar);
+		final Dimension preferredSize = new Dimension(300, 200);
+		final JMenuBar menubar = makeMenuBar();
 
+		frame = new JFrame("Project Umbra");
+		frame.setPreferredSize(preferredSize);
+		frame.setMinimumSize(preferredSize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
 
-	public void show() {
+		frame.setJMenuBar(menubar);
+		frame.setContentPane(scroll);
+
 		frame.pack();
-		frame.setBounds(50, 50, 300, 500);
-		frame.setVisible(true);
-	}
-
-	private static JButton makeButton(String path, String desc, String tooltip,
-			ActionListener listner) {
-		Icon icon = (Icon) getResource(path, new FileInputAction() {
-			@Override
-			public Object act(InputStream input) throws IOException {
-				Icon icon = null;
-				BufferedImage img = ImageIO.read(input);
-				icon = new ImageIcon(img);
-				return icon;
-			}
-		});
-
-		JButton button;
-		if (icon == null) {
-			button = new JButton(desc);
-		}
-		button = new JButton(icon);
-
-		button.setToolTipText(tooltip);
-		button.addActionListener(listner);
-
-		return button;
 	}
 
 	/**
-	 * @param frame
+	 * @param b
+	 * @see java.awt.Window#setVisible(boolean)
 	 */
-	private  JMenuBar makeMenuBar() {
-		JMenuBar menubar = new JMenuBar();
+	public void setVisible(boolean b) {
+		frame.setVisible(b);
+	}
 
-		JButton newFile = makeButton("newFile.png", "[N]",
+	private JMenuBar makeMenuBar() {
+		final JButton newFile = makeButton("newFile.png", "[N]",
 				"Creates a new document.", new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Check for save first
+						saveFile.setLocation(null);
 						text.setText(null);
 					}
 				});
-		menubar.add(newFile);
 
-		JButton open = makeButton("open.png", "[O]", "Open a document.",
+		final JButton open = makeButton("open.png", "[O]", "Open a document.",
 				new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Actually do something with the file opened
-						JFileChooser chooser = new JFileChooser();
-						FileNameExtensionFilter filter = new FileNameExtensionFilter(
-								"Text files", "txt");
-						chooser.setFileFilter(filter);
+						JFileChooser chooser = makeFileChooser();
 						int returnVal = chooser.showOpenDialog(frame);
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							System.out.println("You chose to open this file: "
-									+ chooser.getSelectedFile().getName());
+							saveFile.setLocation(chooser.getSelectedFile());
+							text.setText(saveFile.open());
+							text.repaint();
 						}
 					}
 				});
-		menubar.add(open);
 
-		JButton save = makeButton("save.png", "[S]",
+		final JButton save = makeButton("save.png", "[S]",
 				"Save the current document.", new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Actually save to the file specified
-						JFileChooser chooser = new JFileChooser();
-						FileNameExtensionFilter filter = new FileNameExtensionFilter(
-								"Text files", "txt");
-						chooser.setFileFilter(filter);
-						int returnVal = chooser.showSaveDialog(frame);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							System.out
-									.println("You chose to save to this file: "
-											+ chooser.getSelectedFile()
-													.getName());
+						if (!saveFile.hasLocation()) {
+							JFileChooser chooser = makeFileChooser();
+							int returnVal = chooser.showSaveDialog(frame);
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+								saveFile.setLocation(chooser.getSelectedFile());
+							}
+						}
+						boolean success = saveFile.save(text.getText());
+						if (success) {
+							log("Successfully wrote to "
+									+ saveFile);
+						} else {
+							log("Writing to " + saveFile
+									+ " failed.");
 						}
 					}
 				});
-		menubar.add(save);
 
 		// JButton help = makeButton("help.png", "[H]");
 		// save.setToolTipText("Shows the help dialog.");
@@ -133,7 +115,46 @@ public class View {
 		// // TODO Help event
 		// }
 		// });
+
+		final JMenuBar menubar = new JMenuBar();
+		menubar.setName("menubar");
+		menubar.add(newFile);
+		menubar.add(open);
+		menubar.add(save);
 		// menubar.add(help);
 		return menubar;
+	}
+
+	private static JButton makeButton(String path, String desc, String tooltip,
+			ActionListener listner) {
+		Icon icon = (Icon) getResource(path, new FileInputAction() {
+			@Override
+			public Object act(InputStream input) throws IOException {
+				Icon icon = null;
+				BufferedImage img = ImageIO.read(input);
+				icon = new ImageIcon(img);
+				return icon;
+			}
+		});
+
+		final JButton button;
+		if (icon == null) {
+			button = new JButton(desc);
+		} else {
+			button = new JButton(icon);
+		}
+
+		button.setToolTipText(tooltip);
+		button.addActionListener(listner);
+
+		return button;
+	}
+
+	private JFileChooser makeFileChooser() {
+		final JFileChooser chooser = new JFileChooser();
+		final FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Text files", "txt");
+		chooser.setFileFilter(filter);
+		return chooser;
 	}
 }
