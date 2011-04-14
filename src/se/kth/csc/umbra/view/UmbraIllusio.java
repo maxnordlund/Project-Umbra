@@ -15,7 +15,7 @@ import javax.swing.plaf.basic.BasicTextAreaUI;
 class UmbraIllusio extends BasicTextAreaUI {
 	private JTextArea text;
 
-	public UmbraIllusio(JTextArea text) {
+	UmbraIllusio(JTextArea text) {
 		this.text = text;
 	}
 

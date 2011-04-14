@@ -12,6 +12,6 @@ import java.io.InputStream;
  * 
  * @author Max Nordlund
  */
-public interface LimaInputiActio {
+interface LimaInputiActio {
 	Object act(InputStream input) throws IOException;
 }

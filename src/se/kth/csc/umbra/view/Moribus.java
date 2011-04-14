@@ -8,8 +8,8 @@ import java.awt.event.KeyEvent;
  * 
  * @author Oskar Segersvärd
  */
-public class Moribus {
-	public static KeyEvent translate(KeyEvent event) {
+class Moribus {
+	static KeyEvent translate(KeyEvent event) {
 		int key = event.getKeyCode();
 		int keyCode = 0;
 		switch (key) {
