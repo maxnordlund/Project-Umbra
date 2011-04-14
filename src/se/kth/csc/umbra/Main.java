@@ -2,7 +2,7 @@
  * Project Umbra is a Mhasiran text editor.
  * 
  * It is a text editor for the fictional language Mhasira, which text is written
- * in a special font in vertical columns from left to right.
+ * in a special font in columns from left to right.
  * 
  * The editor is capable of displaying text vertically and allows the user to
  * write simple texts with relative ease. The editor displays all correct
@@ -42,7 +42,7 @@ public final class Main implements Runnable {
 	 */
 	@Override
 	public void run() {
-		frame.setVisible(true);
+		frame.show();
 	}
 
 	/**

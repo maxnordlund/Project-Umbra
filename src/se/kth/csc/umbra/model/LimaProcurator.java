@@ -1,35 +1,72 @@
+/**
+ * The 'model' package contains all aspects of file handling
+ * in the project.
+ */
 package se.kth.csc.umbra.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Scanner;
 
-import se.kth.csc.umbra.Main;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
+ * LimaProcurator is the file manager. Handles opening and closing files. 
+ * 
  * 
  * @author Max Nordlund
- * @version 2011.04.09
+ * @version 2011.04.14
  */
 public class LimaProcurator {
 	private File location;
-	
+
 	public LimaProcurator() {
 		this.location = null;
 	}
 
+	/**
+	 * Sets the file path to the input String.
+	 * 
+	 * @param file path
+	 */
 	public LimaProcurator(String path) {
 		this.location = new File(path);
 	}
 
+	/**
+	 * @return <code>true</code> if a file location has been set. Otherwise <code>false</code>.
+	 */
+	public boolean hasLocation() {
+		return (this.location != null);
+	}
+
+	/**
+	 * @return the path to the file
+	 */
+	public File getLocation() {
+		return location;
+	}
+
+	/**
+	 * Sets the file path to the supplied path.
+	 * 
+	 * @param file path 
+	 */
+	public void setLocation(File location) {
+		this.location = location;
+	}
+
+	/**
+	 * Opens the file at the specified location, reads the file as a
+	 * UTF-8 encoded text file. The content is then returned.
+	 * If there is no location, an empty String is returned.
+	 * 
+	 * @return the contents of the opened file as a String
+	 */
 	public String open() {
-		if(location == null) {
+		if (location == null) {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();
@@ -42,8 +79,8 @@ public class LimaProcurator {
 					sb.append('\n');
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException fnfe) {
+			log(fnfe);
 		} finally {
 			if (scan != null) {
 				scan.close();
@@ -52,8 +89,15 @@ public class LimaProcurator {
 		return sb.toString();
 	}
 
+	/**
+	 * Saves the input String to a file at the specified file location
+	 * using UTF-8 encoding.
+	 * 
+	 * @param String to be saved
+	 * @return <code>true</code> if the save was successful. Otherwise <code>false</code>.
+	 */
 	public boolean save(String text) {
-		if(location == null) {
+		if (location == null) {
 			return false;
 		}
 		Writer writer = null;
@@ -62,35 +106,23 @@ public class LimaProcurator {
 			writer = new OutputStreamWriter(new FileOutputStream(location),
 					"UTF-8");
 			writer.write(text);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException fnfe) {
 			success = false;
-			e.printStackTrace();
-		} catch (IOException e) {
+			log(fnfe);
+		} catch (IOException ioe) {
 			success = false;
-			e.printStackTrace();
+			log(ioe);
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
-				} catch (IOException e) {
+				} catch (IOException ioe) {
 					success = false;
-					e.printStackTrace();
+					log(ioe);
 				}
 			}
 		}
 		return success;
-	}
-	
-	public boolean hasLocation() {
-		return (this.location != null);
-	}
-
-	public File getLocation() {
-		return location;
-	}
-
-	public void setLocation(File location) {
-		this.location = location;
 	}
 
 	/**
@@ -123,28 +155,54 @@ public class LimaProcurator {
 		try {
 			input = new FileInputStream("./" + path);
 			returnObject = action.act(input);
-		} catch (FileNotFoundException e) {
-			input = Main.class.getResourceAsStream("/" + path);
+		} catch (FileNotFoundException fnfe) {
+			input = LimaProcurator.class.getResourceAsStream("/" + path);
 			try {
 				returnObject = action.act(input);
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (IOException ioe) {
+				log(ioe);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			log(ioe);
 		} finally {
 			try {
 				if (input != null) {
 					input.close();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ioe) {
+				log(ioe);
 			}
 		}
 		return returnObject;
 	}
 	
+	public static Icon getIcon(String path) {
+		return (Icon) getResource(path, new LimaInputiActio() {
+			@Override
+			public Object act(InputStream input) throws IOException {
+				Icon icon = null;
+				BufferedImage img = ImageIO.read(input);
+				icon = new ImageIcon(img);
+				return icon;
+			}
+		});
+	}
+
+	/**
+	 * Logs the input string.
+	 * 
+	 * @param String to be logged.
+	 */
 	public static void log(String str) {
 		System.out.println(str);
+	}
+	
+	/**
+	 * Logs the input Exception.
+	 * 
+	 * @param Exception to be logged.
+	 */
+	public static void log(Exception e) {
+		e.printStackTrace();
 	}
 }
