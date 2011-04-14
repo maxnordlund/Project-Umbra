@@ -1,44 +1,51 @@
+/**
+ * The 'view' package contains all aspects of Swing
+ * in the project.
+ */
 package se.kth.csc.umbra.view;
 
 import static se.kth.csc.umbra.model.LimaProcurator.*;
+import se.kth.csc.umbra.model.LimaProcurator;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import se.kth.csc.umbra.model.LimaInputiActio;
-import se.kth.csc.umbra.model.LimaProcurator;
 
 /**
- * @author Max Nordlund
+ * Despectatio is the main class the GraphicUserInterface, and handles all tasks
+ * related to this. Creating windows, buttons etc.
  * 
+ * @author Max Nordlund
+ * @author Oskar Segersvärd
  */
 public class Despectatio {
 	private JFrame frame;
 	private JTextArea text;
 	private LimaProcurator saveFile;
 
-	public Despectatio(LimaProcurator limaProcurator) {
-		this.saveFile = limaProcurator;
-
+	public Despectatio(LimaProcurator saveFile) {
 		text = new JTextArea(5, 5);
 		text.setLineWrap(true);
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		text.setUI(new UmbraIllusio());
+		text.setUI(new UmbraIllusio(text));
 		
+		this.saveFile = saveFile;
+		if (saveFile.hasLocation()) {
+			text.setText(this.saveFile.open());
+		}
+
 		final JScrollPane scroll = new JScrollPane(text);
 
-		final Dimension preferredSize = new Dimension(300, 200);
+		final Dimension preferredSize = new Dimension(300, 400);
 		final JMenuBar menubar = makeMenuBar();
 
 		frame = new JFrame("Proposit Umbra");
+		// frame.setIgnoreRepaint(true);
+		// frame.createBufferStrategy(2);
 		frame.setPreferredSize(preferredSize);
 		frame.setMinimumSize(preferredSize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,13 +57,21 @@ public class Despectatio {
 	}
 
 	/**
-	 * @param b
-	 * @see java.awt.Window#setVisible(boolean)
+	 * Displays the frame and initiates the update-loop.
 	 */
-	public void setVisible(boolean b) {
-		frame.setVisible(b);
+	public void show() {
+		frame.setVisible(true);
+
 	}
 
+	/**
+	 * The created menubar contains: New-button, that creates a new file
+	 * Open-button, opens a dialog to find a file for editing Save-button, tries
+	 * to save a file, if no 'location' has been set a save dialog will ask you
+	 * to input one
+	 * 
+	 * @return a menubar with basic buttons
+	 */
 	private JMenuBar makeMenuBar() {
 		final JButton newFile = makeButton("newFile.png", "[N]",
 				"Creates a new document.", new ActionListener() {
@@ -94,28 +109,22 @@ public class Despectatio {
 						}
 						boolean success = saveFile.save(text.getText());
 						if (success) {
-							log("Successfully wrote to "
-									+ saveFile);
+							log("Successfully wrote to " + saveFile);
 						} else {
-							log("Writing to " + saveFile
-									+ " failed.");
+							log("Writing to " + saveFile + " failed.");
 						}
 					}
 				});
 
-		// JButton help = makeButton("help.png", "[H]");
-		// save.setToolTipText("Shows the help dialog.");
-		// save.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// StringBuilder sb = new
-		// StringBuilder("Is your computer unable to export to pdf?");
-		// String s = sb.toString();
-		// JOptionPane.showMessageDialog(frame, s);
-		//
-		// // TODO Help event
-		// }
-		// });
+		/*
+		 * final JButton help = makeButton("help.png", "[H]",
+		 * "Shows the help dialog.", new ActionListener() {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) { //TODO
+		 * event StringBuilder sb = new StringBuilder(
+		 * "Is your computer unable to export to pdf?"); String s =
+		 * sb.toString(); JOptionPane.showMessageDialog(frame, s); } }); //
+		 */
 
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
@@ -126,17 +135,15 @@ public class Despectatio {
 		return menubar;
 	}
 
+	/**
+	 * Creates a button with the supplied tooltip and
+	 * {@link java.awt.event.ActionListener ActionListener}. If an icon is
+	 * located on the supplied path, than that is used as well. Otherwise, the
+	 * description is used.
+	 */
 	private static JButton makeButton(String path, String desc, String tooltip,
 			ActionListener listner) {
-		Icon icon = (Icon) getResource(path, new LimaInputiActio() {
-			@Override
-			public Object act(InputStream input) throws IOException {
-				Icon icon = null;
-				BufferedImage img = ImageIO.read(input);
-				icon = new ImageIcon(img);
-				return icon;
-			}
-		});
+		Icon icon = getIcon(path);
 
 		final JButton button;
 		if (icon == null) {
@@ -151,6 +158,12 @@ public class Despectatio {
 		return button;
 	}
 
+	/**
+	 * Creates a JFileChooser, sets a 'text format' filter and returns this
+	 * JFileChooser.
+	 * 
+	 * @return the created file chooser
+	 */
 	private JFileChooser makeFileChooser() {
 		final JFileChooser chooser = new JFileChooser();
 		final FileNameExtensionFilter filter = new FileNameExtensionFilter(
