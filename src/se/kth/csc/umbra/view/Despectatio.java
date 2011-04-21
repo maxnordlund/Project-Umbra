@@ -9,10 +9,13 @@ import se.kth.csc.umbra.model.LimaProcurator;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import kth.vs.proto.ImagePanel;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -25,35 +28,48 @@ public class Despectatio {
 	private JFrame frame;
 	private JTextArea text;
 	private LimaProcurator saveFile;
+	private final JScrollPane scroll;
+	private BufferedImage image;
 
 	public Despectatio(LimaProcurator saveFile) {
+		final Dimension preferredSize = new Dimension(300, 350);
+		final int i = 5;
+
 		text = new JTextArea(5, 5);
 		text.setLineWrap(true);
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		text.setUI(new UmbraIllusio(text));
-		
+		text.setBorder(new EmptyBorder(i, i, i, i));
+		text.setText("اشقنئش سك عةش يثوى" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNakanaka!");
+
+		// text.setUI(new UmbraIllusio(text));
+		// text.setFont(null);
+
 		this.saveFile = saveFile;
 		if (saveFile.hasLocation()) {
 			text.setText(this.saveFile.open());
 		}
 
-		final JScrollPane scroll = new JScrollPane(text);
+		scroll = new JScrollPane(text);
+		scroll.setPreferredSize(preferredSize);
 
-		final Dimension preferredSize = new Dimension(300, 400);
 		final JMenuBar menubar = makeMenuBar();
 
 		frame = new JFrame("Proposit Umbra");
 		// frame.setIgnoreRepaint(true);
 		// frame.createBufferStrategy(2);
-		frame.setPreferredSize(preferredSize);
-		frame.setMinimumSize(preferredSize);
+		// frame.setPreferredSize(secondarySize);
+		// frame.setMinimumSize(secondarySize);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menubar);
 		frame.setContentPane(scroll);
 
 		frame.pack();
+
+		supportImages();
+		
 	}
 
 	/**
@@ -61,7 +77,6 @@ public class Despectatio {
 	 */
 	public void show() {
 		frame.setVisible(true);
-
 	}
 
 	/**
@@ -116,22 +131,29 @@ public class Despectatio {
 					}
 				});
 
-		/*
-		 * final JButton help = makeButton("help.png", "[H]",
-		 * "Shows the help dialog.", new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) { //TODO
-		 * event StringBuilder sb = new StringBuilder(
-		 * "Is your computer unable to export to pdf?"); String s =
-		 * sb.toString(); JOptionPane.showMessageDialog(frame, s); } }); //
-		 */
+		final JButton help = makeButton("save.png", "[H]",
+				"Shows the help dialog.", new ActionListener() { // Cannot
+																	// handle
+																	// null as
+																	// image
+																	// path!
+
+					@Override
+					public void actionPerformed(ActionEvent e) { // TODO event
+						supportImages();
+						// StringBuilder sb = new StringBuilder(
+						// "Is your computer unable to export to pdf?");
+						// String s = sb.toString();
+						// JOptionPane.showMessageDialog(frame, s);
+					}
+				}); //
 
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);
 		menubar.add(open);
 		menubar.add(save);
-		// menubar.add(help);
+		menubar.add(help);
 		return menubar;
 	}
 
@@ -171,4 +193,43 @@ public class Despectatio {
 		chooser.setFileFilter(filter);
 		return chooser;
 	}
+
+	// Recently added prototype code
+	
+	private void generateTestWindow(BufferedImage image, int frameNumber) {
+		JFrame frame = new JFrame("Develpoment Window " + frameNumber);
+		ImagePanel ip = new ImagePanel(image);
+		frame.add(ip);
+		frame.pack();
+		frame.setVisible(true);
+	}
+	
+	private void supportImages() {
+		image = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		Graphics2D secondary = image.createGraphics();
+		scroll.paint(secondary);
+		secondary.dispose();
+		
+		generateTestWindow(image, 1);
+
+		BufferedImage rotatedImage = new BufferedImage(image.getHeight(),
+				image.getWidth(), BufferedImage.TYPE_INT_RGB);
+
+		rotateLeft(image, rotatedImage);
+
+		generateTestWindow(rotatedImage, 2);
+	}
+
+	private void rotateLeft(BufferedImage sourceImage,
+			BufferedImage generatedImage) {
+		for (int i = 0; i < sourceImage.getHeight(); i++) {
+			for (int j = 0; j < sourceImage.getWidth(); j++) {
+				generatedImage.setRGB(i, sourceImage.getWidth() - (j + 1),
+						sourceImage.getRGB(j, i));
+			}
+		}
+	}
+
+	
 }
