@@ -136,6 +136,9 @@ public class LimaProcurator {
 	 */
 	@Override
 	public String toString() {
+		if(location == null) {
+			return "";
+		}
 		return location.toString();
 	}
 

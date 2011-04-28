@@ -35,8 +35,9 @@ public class Despectatio {
 	private JFrame hiddenFrame;
 
 	public Despectatio(LimaProcurator saveFile) {
-		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED, Font.ITALIC, 20));
-		
+		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
+				Font.ITALIC, 20));
+
 		final Dimension preferredSize = new Dimension(300, 350);
 		final int i = 5;
 
@@ -95,7 +96,7 @@ public class Despectatio {
 
 		updateImage();
 		frame.setVisible(true);
-//		hiddenFrame.setVisible(true);
+		// hiddenFrame.setVisible(true);
 	}
 
 	public void updateImage() {
@@ -171,7 +172,11 @@ public class Despectatio {
 						if (success) {
 							log("Successfully wrote to " + saveFile);
 						} else {
-							log("Writing to " + saveFile + " failed.");
+							if (saveFile.hasLocation()) {
+								log("Writing to " + saveFile + " failed.");
+							} else {
+								log("User choose no file.");
+							}
 						}
 					}
 				});
@@ -191,7 +196,7 @@ public class Despectatio {
 						// JOptionPane.showMessageDialog(frame, s);
 					}
 				}); //
-		
+
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);

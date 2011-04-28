@@ -126,7 +126,11 @@ public class Despectatio {
 						if (success) {
 							log("Successfully wrote to " + saveFile);
 						} else {
-							log("Writing to " + saveFile + " failed.");
+							if (saveFile.hasLocation()) {
+								log("Writing to " + saveFile + " failed.");
+							} else {
+								log("User choose no file.");
+							}
 						}
 					}
 				});
