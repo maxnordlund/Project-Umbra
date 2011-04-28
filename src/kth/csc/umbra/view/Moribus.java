@@ -1,10 +1,11 @@
-package se.kth.csc.umbra.view;
+package kth.csc.umbra.view;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 
 /**
- * Translated KeyEvents from the user into KeyEvents for our TextArea to act upon.
+ * Translated KeyEvents from the user into KeyEvents for our TextArea to act
+ * upon.
  * 
  * @author Oskar Segersvärd
  */

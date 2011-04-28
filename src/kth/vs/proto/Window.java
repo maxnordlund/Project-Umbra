@@ -1,15 +1,10 @@
 package kth.vs.proto;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class Window implements ComponentListener, MouseListener {
 
@@ -53,7 +48,7 @@ public class Window implements ComponentListener, MouseListener {
 		graphics.setColor(Color.BLACK);
 		drawText(graphics);
 		graphics.dispose();
-		
+
 		panel = new ImagePanel(image);
 
 		frame.add(panel);
@@ -68,10 +63,9 @@ public class Window implements ComponentListener, MouseListener {
 
 	private void drawText(Graphics2D g) {
 		g.drawString("Don't have anymore, Mrs. Moore!", 0, 10);
-//		Graphics tg = text.getGraphics();
+		// Graphics tg = text.getGraphics();
 		text.print(g);
-		
-		
+
 	}
 
 	@Override
@@ -101,30 +95,30 @@ public class Window implements ComponentListener, MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		updateImage();
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

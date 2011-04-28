@@ -1,8 +1,7 @@
 /**
- * The 'model' package contains all aspects of file handling
- * in the project.
+ * The 'model' package contains all aspects of file handling in the project.
  */
-package se.kth.csc.umbra.model;
+package kth.csc.umbra.model;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -13,7 +12,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * LimaProcurator is the file manager. Handles opening and closing files. 
+ * LimaProcurator is the file manager. Handles opening and closing files.
  * 
  * 
  * @author Max Nordlund
@@ -29,14 +28,16 @@ public class LimaProcurator {
 	/**
 	 * Sets the file path to the input String.
 	 * 
-	 * @param file path
+	 * @param file
+	 *            path
 	 */
 	public LimaProcurator(String path) {
 		this.location = new File(path);
 	}
 
 	/**
-	 * @return <code>true</code> if a file location has been set. Otherwise <code>false</code>.
+	 * @return <code>true</code> if a file location has been set. Otherwise
+	 *         <code>false</code>.
 	 */
 	public boolean hasLocation() {
 		return (this.location != null);
@@ -52,16 +53,17 @@ public class LimaProcurator {
 	/**
 	 * Sets the file path to the supplied path.
 	 * 
-	 * @param file path 
+	 * @param file
+	 *            path
 	 */
 	public void setLocation(File location) {
 		this.location = location;
 	}
 
 	/**
-	 * Opens the file at the specified location, reads the file as a
-	 * UTF-8 encoded text file. The content is then returned.
-	 * If there is no location, an empty String is returned.
+	 * Opens the file at the specified location, reads the file as a UTF-8
+	 * encoded text file. The content is then returned. If there is no location,
+	 * an empty String is returned.
 	 * 
 	 * @return the contents of the opened file as a String
 	 */
@@ -90,11 +92,13 @@ public class LimaProcurator {
 	}
 
 	/**
-	 * Saves the input String to a file at the specified file location
-	 * using UTF-8 encoding.
+	 * Saves the input String to a file at the specified file location using
+	 * UTF-8 encoding.
 	 * 
-	 * @param String to be saved
-	 * @return <code>true</code> if the save was successful. Otherwise <code>false</code>.
+	 * @param String
+	 *            to be saved
+	 * @return <code>true</code> if the save was successful. Otherwise
+	 *         <code>false</code>.
 	 */
 	public boolean save(String text) {
 		if (location == null) {
@@ -175,7 +179,7 @@ public class LimaProcurator {
 		}
 		return returnObject;
 	}
-	
+
 	public static Icon getIcon(String path) {
 		return (Icon) getResource(path, new LimaInputiActio() {
 			@Override
@@ -191,16 +195,18 @@ public class LimaProcurator {
 	/**
 	 * Logs the input string.
 	 * 
-	 * @param String to be logged.
+	 * @param String
+	 *            to be logged.
 	 */
 	public static void log(String str) {
 		System.out.println(str);
 	}
-	
+
 	/**
 	 * Logs the input Exception.
 	 * 
-	 * @param Exception to be logged.
+	 * @param Exception
+	 *            to be logged.
 	 */
 	public static void log(Exception e) {
 		e.printStackTrace();

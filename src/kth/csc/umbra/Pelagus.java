@@ -9,12 +9,13 @@
  * variations of the characters, something other programs such as word is
  * incapable of.
  */
-package se.kth.csc.umbra;
+package kth.csc.umbra;
 
 import javax.swing.SwingUtilities;
 
-import se.kth.csc.umbra.model.LimaProcurator;
-import se.kth.csc.umbra.view.Despectatio;
+import kth.csc.umbra.model.LimaProcurator;
+import kth.csc.umbra.view.Despectatio;
+
 
 /**
  * This class is responsible for setting up the object graph and starting the
@@ -24,13 +25,13 @@ import se.kth.csc.umbra.view.Despectatio;
  * @author Oskar Segersvärd
  * @version 2011.04.01
  */
-public final class Main implements Runnable {
+public final class Pelagus implements Runnable {
 	@SuppressWarnings("unused")
 	private static final String USAGE = "Project-Umbra path";
 	private LimaProcurator file;
 	private Despectatio frame;
 
-	private Main(LimaProcurator file) {
+	private Pelagus(LimaProcurator file) {
 		this.file = file;
 		this.frame = new Despectatio(this.file);
 	}
@@ -55,6 +56,6 @@ public final class Main implements Runnable {
 		} else {
 			file = new LimaProcurator(args[0]);
 		}
-		SwingUtilities.invokeLater(new Main(file));
+		SwingUtilities.invokeLater(new Pelagus(file));
 	}
 }

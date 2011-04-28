@@ -1,11 +1,9 @@
 /**
- * The 'view' package contains all aspects of Swing
- * in the project.
+ * The 'view' package contains all aspects of Swing in the project.
  */
-package se.kth.csc.umbra.view;
+package kth.vs.proto;
 
-import static se.kth.csc.umbra.model.LimaProcurator.*;
-import se.kth.csc.umbra.model.LimaProcurator;
+import static kth.csc.umbra.model.LimaProcurator.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import kth.csc.umbra.model.LimaProcurator;
 import kth.vs.proto.ImagePanel;
 
 /**
@@ -26,10 +25,12 @@ import kth.vs.proto.ImagePanel;
  */
 public class Despectatio {
 	private JFrame frame;
+	private BufferedImage middleImage;
+	private BufferedImage rotatedImage;
 	private JTextArea text;
 	private LimaProcurator saveFile;
 	private final JScrollPane scroll;
-	private BufferedImage image;
+	private ImagePanel panel;
 
 	public Despectatio(LimaProcurator saveFile) {
 		final Dimension preferredSize = new Dimension(300, 350);
@@ -40,7 +41,8 @@ public class Despectatio {
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		text.setBorder(new EmptyBorder(i, i, i, i));
-		text.setText("اشقنئش سك عةش يثوى" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNakanaka!");
+		text.setText("اشقنئش سك عةش يثوى"
+				+ "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNakanaka!");
 
 		// text.setUI(new UmbraIllusio(text));
 		// text.setFont(null);
@@ -64,12 +66,14 @@ public class Despectatio {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menubar);
-		frame.setContentPane(scroll);
 
-		frame.pack();
+		generateTestWindow();
 
 		supportImages();
-		
+
+		frame.setContentPane(panel);
+		frame.pack();
+
 	}
 
 	/**
@@ -195,30 +199,30 @@ public class Despectatio {
 	}
 
 	// Recently added prototype code
-	
-	private void generateTestWindow(BufferedImage image, int frameNumber) {
-		JFrame frame = new JFrame("Develpoment Window " + frameNumber);
-		ImagePanel ip = new ImagePanel(image);
-		frame.add(ip);
+
+	private void generateTestWindow() {
+		JFrame frame = new JFrame("Develpoment Window ");
+		frame.add(scroll);
 		frame.pack();
 		frame.setVisible(true);
 	}
-	
+
 	private void supportImages() {
-		image = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
+		middleImage = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
-		Graphics2D secondary = image.createGraphics();
+		rotatedImage = new BufferedImage(middleImage.getHeight(),
+				middleImage.getWidth(), BufferedImage.TYPE_INT_RGB);
+		panel = new ImagePanel(rotatedImage);
+
+		updateImage();
+	}
+
+	public void updateImage() {
+		Graphics2D secondary = middleImage.createGraphics();
 		scroll.paint(secondary);
 		secondary.dispose();
-		
-		generateTestWindow(image, 1);
 
-		BufferedImage rotatedImage = new BufferedImage(image.getHeight(),
-				image.getWidth(), BufferedImage.TYPE_INT_RGB);
-
-		rotateLeft(image, rotatedImage);
-
-		generateTestWindow(rotatedImage, 2);
+		rotateLeft(middleImage, rotatedImage);
 	}
 
 	private void rotateLeft(BufferedImage sourceImage,
@@ -231,5 +235,4 @@ public class Despectatio {
 		}
 	}
 
-	
 }

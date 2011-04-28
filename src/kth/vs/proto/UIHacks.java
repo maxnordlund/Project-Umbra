@@ -1,21 +1,11 @@
 package kth.vs.proto;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 
 public class UIHacks {
 	private final static boolean WORKING = true;
@@ -91,7 +81,7 @@ public class UIHacks {
 		// g2.translate(-text.getWidth(), -text.getHeight());
 		// text.paint(g2);
 		// g2.dispose();
-		//		
+		//
 		// si = (BufferedImage) text.createImage(text.WIDTH, text.HEIGHT);
 
 	}
@@ -115,24 +105,23 @@ public class UIHacks {
 	private void createImagePanels() {
 		vip = new ImagePanel();
 		vip.setImage(vi);
-//		vip.addMouseListener(createML());
-//		vip.addMouseMotionListener(createMML());
+		// vip.addMouseListener(createML());
+		// vip.addMouseMotionListener(createMML());
 		vC.add(vip);
-		
 
 		scrollP = new JScrollPane(text);
 		scrollP.setAutoscrolls(true);
 		scrollP.setVisible(true);
-		
+
 		Graphics2D g = (Graphics2D) si.getGraphics();
 		scrollP.paint(g);
 		g.dispose();
 
 		sip = new ImagePanel();
 		sip.setImage(si);
-		
+
 		sC.add(sip);
-//		sC.add(scrollP);
+		// sC.add(scrollP);
 	}
 
 	private void packAndShow() {
@@ -144,8 +133,8 @@ public class UIHacks {
 		}
 
 		vF.pack();
-		vF.setLocation(d.width / 2 - vF.getWidth() / 2, d.height / 2
-				- vF.getHeight() / 2);
+		vF.setLocation(d.width / 2 - vF.getWidth() / 2,
+				d.height / 2 - vF.getHeight() / 2);
 		vF.setVisible(true);
 	}
 

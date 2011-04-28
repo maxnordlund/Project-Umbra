@@ -1,16 +1,9 @@
-package se.kth.csc.umbra.view;
+package kth.csc.umbra.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
-import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.plaf.basic.BasicTextAreaUI;
-
-import kth.vs.proto.ImagePanel;
 
 /**
  * UmbraIllusio is responsible for displaying the text vertically instead of
@@ -18,11 +11,10 @@ import kth.vs.proto.ImagePanel;
  * 
  * @deprecated Unnecessary due to converting JScrollPanel to a BufferedImage
  */
+@Deprecated
 class UmbraIllusio extends BasicTextAreaUI {
+	@SuppressWarnings("unused")
 	private JTextArea text;
-	private BufferedImage image;
-	private ImagePanel ip;
-	private int i = 0;
 
 	UmbraIllusio(JTextArea text) {
 		this.text = text;
@@ -33,7 +25,7 @@ class UmbraIllusio extends BasicTextAreaUI {
 	 */
 	@Override
 	public void paintSafely(Graphics g) {
-		Dimension d = text.getSize();
+		// Dimension d = text.getSize();
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintSafely(g2d);
 
