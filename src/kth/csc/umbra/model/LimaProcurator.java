@@ -186,6 +186,9 @@ public class LimaProcurator {
 			public Object act(InputStream input) throws IOException {
 				Icon icon = null;
 				BufferedImage img = ImageIO.read(input);
+				if(img == null) {
+					return null;
+				}
 				icon = new ImageIcon(img);
 				return icon;
 			}

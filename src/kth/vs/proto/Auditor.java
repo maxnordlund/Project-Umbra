@@ -3,13 +3,14 @@
  */
 package kth.vs.proto;
 
+import static kth.csc.umbra.model.LimaProcurator.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-import kth.vs.proto.ImagePanel;
 
 /**
  * @author max.nordlund
@@ -19,12 +20,20 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	private JComponent source;
 	private JComponent target;
 	private Despectatio master;
+	private JTextArea text;
 
-	public Auditor(JComponent source, JComponent target, Despectatio master) {
+	public Auditor(JComponent source, JComponent target, Despectatio master, JTextArea text) {
 		this.source = source;
 		this.target = target;
 		this.master = master;
+		this.text = text;
 		
+		source.addMouseWheelListener(this);
+		source.addMouseListener(this);
+		source.addMouseMotionListener(this);
+		source.addKeyListener(this);
+		
+		text.addCaretListener(this);
 	}
 
 	/**
@@ -47,6 +56,8 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	public void mouseClicked(MouseEvent event) {
 		translate(event);
 		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 	}
 
 	/*
@@ -55,9 +66,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mouseEntered(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 	}
 
 	/*
@@ -66,8 +79,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseExited(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 
 	}
 
@@ -77,8 +93,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mousePressed(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 
 	}
 
@@ -89,8 +108,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseReleased(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 
 	}
 
@@ -102,8 +124,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * )
 	 */
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseDragged(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 
 	}
 
@@ -114,8 +139,11 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseMoved(MouseEvent event) {
+		translate(event);
+		target.dispatchEvent(event);
+//		log(event.toString());
+		master.updateImage();
 
 	}
 
@@ -125,8 +153,10 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyPressed(KeyEvent event) {
+//		log(event.toString());
+		System.out.println(event.getKeyCode());
+		System.out.println(text.getCaretPosition());
 
 	}
 
@@ -136,8 +166,8 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyReleased(KeyEvent event) {
+//		log(event.toString());
 
 	}
 
@@ -147,9 +177,15 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void keyTyped(KeyEvent event) {
+//		log(event.toString());
+//		switch(event.getKeyCode()){
+//		case 8 : text.
+//		(text.getCaretPosition()); 
+//			break;
+//		default: text.dispatchEvent(event);
+//		}
+		text.dispatchEvent(event);
 	}
 
 	/*
@@ -160,13 +196,14 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWh
 	 */
 	@Override
 	public void caretUpdate(CaretEvent e) {
-		source.repaint();
-		target.repaint();
+		master.updateImage();
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
+//		log(Integer.toString(e.getWheelRotation()));
+		target.dispatchEvent(e);
+		master.updateImage();
 		
 	}
 }

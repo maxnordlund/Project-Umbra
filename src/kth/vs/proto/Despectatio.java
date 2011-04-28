@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FontUIResource;
 
 import kth.csc.umbra.model.LimaProcurator;
 import kth.vs.proto.ImagePanel;
@@ -31,8 +32,11 @@ public class Despectatio {
 	private LimaProcurator saveFile;
 	private final JScrollPane scroll;
 	private ImagePanel panel;
+	private JFrame hiddenFrame;
 
 	public Despectatio(LimaProcurator saveFile) {
+		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED, Font.ITALIC, 20));
+		
 		final Dimension preferredSize = new Dimension(300, 350);
 		final int i = 5;
 
@@ -67,20 +71,57 @@ public class Despectatio {
 
 		frame.setJMenuBar(menubar);
 
-		generateTestWindow();
+		hiddenFrame = makeHiddenFrame();
 
-		supportImages();
+		middleImage = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+
+		rotatedImage = new BufferedImage(middleImage.getHeight(),
+				middleImage.getWidth(), BufferedImage.TYPE_INT_RGB);
+
+		panel = new ImagePanel(rotatedImage);
+		panel.setFocusable(true);
 
 		frame.setContentPane(panel);
 		frame.pack();
 
+		Auditor relay = new Auditor(panel, scroll, this, text);
 	}
 
 	/**
 	 * Displays the frame and initiates the update-loop.
 	 */
 	public void show() {
+
+		updateImage();
 		frame.setVisible(true);
+//		hiddenFrame.setVisible(true);
+	}
+
+	public void updateImage() {
+		Graphics2D secondary = middleImage.createGraphics();
+		scroll.paint(secondary);
+		secondary.dispose();
+
+		rotateLeft(middleImage, rotatedImage);
+		panel.repaint();
+	}
+
+	private void rotateLeft(BufferedImage sourceImage,
+			BufferedImage generatedImage) {
+		for (int i = 0; i < sourceImage.getHeight(); i++) {
+			for (int j = 0; j < sourceImage.getWidth(); j++) {
+				generatedImage.setRGB(i, sourceImage.getWidth() - (j + 1),
+						sourceImage.getRGB(j, i));
+			}
+		}
+	}
+
+	private JFrame makeHiddenFrame() {
+		JFrame hiddenFrame = new JFrame("Hidden Window");
+		hiddenFrame.add(scroll);
+		hiddenFrame.pack();
+		return hiddenFrame;
 	}
 
 	/**
@@ -135,23 +176,22 @@ public class Despectatio {
 					}
 				});
 
-		final JButton help = makeButton("save.png", "[H]",
-				"Shows the help dialog.", new ActionListener() { // Cannot
-																	// handle
-																	// null as
-																	// image
-																	// path!
+		final JButton help = makeButton("", "[H]", "Shows the help dialog.",
+				new ActionListener() { // Cannot
+										// handle
+										// null as
+										// image
+										// path!
 
 					@Override
 					public void actionPerformed(ActionEvent e) { // TODO event
-						supportImages();
 						// StringBuilder sb = new StringBuilder(
 						// "Is your computer unable to export to pdf?");
 						// String s = sb.toString();
 						// JOptionPane.showMessageDialog(frame, s);
 					}
 				}); //
-
+		
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);
@@ -169,9 +209,9 @@ public class Despectatio {
 	 */
 	private static JButton makeButton(String path, String desc, String tooltip,
 			ActionListener listner) {
+		final JButton button;
 		Icon icon = getIcon(path);
 
-		final JButton button;
 		if (icon == null) {
 			button = new JButton(desc);
 		} else {
@@ -180,6 +220,7 @@ public class Despectatio {
 
 		button.setToolTipText(tooltip);
 		button.addActionListener(listner);
+		button.setFocusable(false);
 
 		return button;
 	}
@@ -196,43 +237,6 @@ public class Despectatio {
 				"Text files", "txt");
 		chooser.setFileFilter(filter);
 		return chooser;
-	}
-
-	// Recently added prototype code
-
-	private void generateTestWindow() {
-		JFrame frame = new JFrame("Develpoment Window ");
-		frame.add(scroll);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	private void supportImages() {
-		middleImage = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
-				BufferedImage.TYPE_INT_RGB);
-		rotatedImage = new BufferedImage(middleImage.getHeight(),
-				middleImage.getWidth(), BufferedImage.TYPE_INT_RGB);
-		panel = new ImagePanel(rotatedImage);
-
-		updateImage();
-	}
-
-	public void updateImage() {
-		Graphics2D secondary = middleImage.createGraphics();
-		scroll.paint(secondary);
-		secondary.dispose();
-
-		rotateLeft(middleImage, rotatedImage);
-	}
-
-	private void rotateLeft(BufferedImage sourceImage,
-			BufferedImage generatedImage) {
-		for (int i = 0; i < sourceImage.getHeight(); i++) {
-			for (int j = 0; j < sourceImage.getWidth(); j++) {
-				generatedImage.setRGB(i, sourceImage.getWidth() - (j + 1),
-						sourceImage.getRGB(j, i));
-			}
-		}
 	}
 
 }
