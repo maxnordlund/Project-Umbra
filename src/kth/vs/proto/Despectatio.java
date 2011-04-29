@@ -106,7 +106,8 @@ public class Despectatio {
 		secondary.dispose();
 
 		rotateLeft(middleImage, rotatedImage);
-		panel.repaint();
+		
+		panel.repaint(100);
 	}
 
 	private void rotateLeft(BufferedImage sourceImage,
@@ -183,11 +184,7 @@ public class Despectatio {
 				});
 
 		/* final JButton help = makeButton("help.png", "[H]", "Shows the help dialog.",
-				new ActionListener() { // Cannot
-										// handle
-										// null as
-										// image
-										// path!
+				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) { // TODO event
