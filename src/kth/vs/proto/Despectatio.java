@@ -33,6 +33,7 @@ public class Despectatio {
 	private final JScrollPane scroll;
 	private ImagePanel panel;
 	private JFrame hiddenFrame;
+	private Auditor relay;
 
 	public Despectatio(LimaProcurator saveFile) {
 		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
@@ -72,7 +73,7 @@ public class Despectatio {
 
 		frame.setJMenuBar(menubar);
 
-		hiddenFrame = makeHiddenFrame();
+		hiddenFrame = makeHiddenFrame(scroll);
 
 		middleImage = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
@@ -86,7 +87,7 @@ public class Despectatio {
 		frame.setContentPane(panel);
 		frame.pack();
 
-		Auditor relay = new Auditor(panel, scroll, this, text);
+		relay = new Auditor(panel, scroll, this, text);
 	}
 
 	/**
@@ -118,7 +119,7 @@ public class Despectatio {
 		}
 	}
 
-	private JFrame makeHiddenFrame() {
+	private JFrame makeHiddenFrame(JScrollPane scroll) {
 		JFrame hiddenFrame = new JFrame("Hidden Window");
 		hiddenFrame.add(scroll);
 		hiddenFrame.pack();
@@ -181,7 +182,7 @@ public class Despectatio {
 					}
 				});
 
-		final JButton help = makeButton("", "[H]", "Shows the help dialog.",
+		/* final JButton help = makeButton("help.png", "[H]", "Shows the help dialog.",
 				new ActionListener() { // Cannot
 										// handle
 										// null as
@@ -195,14 +196,14 @@ public class Despectatio {
 						// String s = sb.toString();
 						// JOptionPane.showMessageDialog(frame, s);
 					}
-				}); //
+				}); // */
 
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);
 		menubar.add(open);
 		menubar.add(save);
-		menubar.add(help);
+//		menubar.add(help);
 		return menubar;
 	}
 
