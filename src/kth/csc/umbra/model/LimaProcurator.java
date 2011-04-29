@@ -207,8 +207,8 @@ public class LimaProcurator {
 	 * @param String
 	 *            to be logged.
 	 */
-	public static void log(String str) {
-		System.out.println(str);
+	public static void log(Object obj) {
+		System.out.println(obj);
 	}
 
 	/**
