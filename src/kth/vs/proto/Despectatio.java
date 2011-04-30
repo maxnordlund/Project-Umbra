@@ -48,7 +48,7 @@ public class Despectatio {
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		text.setBorder(new EmptyBorder(i, i, i, i));
 		text.setText("اشقنئش سك عةش يثوى"
-				+ "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNakanaka!");
+				+ "\n\n\n\n\n\n\n\n\n\n\n\n有毒な書き方\n\n\n\n\n\n\n\n\n\n\n\n\n\nيثلاث");
 
 		// text.setUI(new UmbraIllusio(text));
 		// text.setFont(null);
@@ -87,7 +87,7 @@ public class Despectatio {
 		frame.setContentPane(panel);
 		frame.pack();
 
-		relay = new Auditor(panel, scroll, this, text);
+		relay = new Auditor(panel, scroll, text, this);
 	}
 
 	/**
@@ -101,9 +101,10 @@ public class Despectatio {
 	}
 
 	public void updateImage() {
-		Graphics2D secondary = middleImage.createGraphics();
-		scroll.paint(secondary);
-		secondary.dispose();
+		Graphics2D g2d = middleImage.createGraphics();
+//		scroll.paint(g2d);
+		scroll.update(g2d);
+		g2d.dispose();
 
 		rotateLeft(middleImage, rotatedImage);
 		

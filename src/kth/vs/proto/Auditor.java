@@ -18,22 +18,22 @@ import javax.swing.text.BadLocationException;
  */
 class Auditor implements CaretListener, KeyListener, MouseInputListener,
 		MouseWheelListener {
-	private JComponent source;
-	private JComponent target;
-	private Despectatio master;
+	private ImagePanel imagePanel;
+	private JScrollPane scroll;
+	private Despectatio despectatio;
 	private JTextArea text;
 
-	public Auditor(JComponent source, JComponent target, Despectatio master,
-			JTextArea text) {
-		this.source = source;
-		this.target = target;
-		this.master = master;
+	public Auditor(ImagePanel imagePanel, JScrollPane scroll, JTextArea text,
+			Despectatio despectatio) {
+		this.imagePanel = imagePanel;
+		this.scroll = scroll;
+		this.despectatio = despectatio;
 		this.text = text;
 
-		source.addMouseWheelListener(this);
-		source.addMouseListener(this);
-		source.addMouseMotionListener(this);
-		source.addKeyListener(this);
+		imagePanel.addMouseWheelListener(this);
+		imagePanel.addMouseListener(this);
+		imagePanel.addMouseMotionListener(this);
+		imagePanel.addKeyListener(this);
 
 		text.addCaretListener(this);
 	}
@@ -46,7 +46,7 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 	private void translate(MouseEvent event) {
 		int x = event.getX();
 		int y = event.getY();
-		event.translatePoint(source.getHeight() - y - x, x - y);
+		event.translatePoint(imagePanel.getHeight() - y - x, x - y);
 	}
 
 	/*
@@ -63,12 +63,14 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 
 	private void processEvent(MouseEvent event) {
 		translate(event);
-		event.setSource(target);
-		target.dispatchEvent(event);
-		event.setSource(text);
-		text.dispatchEvent(event);
+		event.setSource(scroll);
+		scroll.dispatchEvent(event);
 		
-		master.updateImage();
+		event.setSource(text);
+		event.translatePoint(0, scroll.getVerticalScrollBar().getValue());
+		text.dispatchEvent(event);
+
+		despectatio.updateImage();
 	}
 
 	/*
@@ -194,13 +196,13 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 	 */
 	@Override
 	public void caretUpdate(CaretEvent e) {
-		master.updateImage();
+		despectatio.updateImage();
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// log(Integer.toString(e.getWheelRotation()));
-		target.dispatchEvent(e);
-		master.updateImage();
+		scroll.dispatchEvent(e);
+		despectatio.updateImage();
 	}
 }
