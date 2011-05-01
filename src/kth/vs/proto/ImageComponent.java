@@ -12,7 +12,7 @@ import javax.swing.*;
  * 
  * @author Oskar Segersvärd
  */
-public class ImagePanel extends JComponent {
+public class ImageComponent extends JComponent {
 	private static final long serialVersionUID = -2367710019982764764L;
 
 	// The current width and height of this panel
@@ -25,13 +25,13 @@ public class ImagePanel extends JComponent {
 	/**
 	 * Create a new, empty ImagePanel.
 	 */
-	public ImagePanel() {
+	public ImageComponent() {
 		width = 360;
 		height = 240;
 		panelImage = null;
 	}
 
-	public ImagePanel(BufferedImage image) {
+	public ImageComponent(BufferedImage image) {
 		setImage(image);
 	}
 

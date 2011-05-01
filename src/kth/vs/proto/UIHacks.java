@@ -19,8 +19,8 @@ public class UIHacks {
 
 	private BufferedImage vi;
 	private BufferedImage si;
-	private ImagePanel vip;
-	private ImagePanel sip;
+	private ImageComponent vip;
+	private ImageComponent sip;
 	private JScrollPane scrollP;
 	private JTextArea text;
 
@@ -103,7 +103,7 @@ public class UIHacks {
 	}
 
 	private void createImagePanels() {
-		vip = new ImagePanel();
+		vip = new ImageComponent();
 		vip.setImage(vi);
 		// vip.addMouseListener(createML());
 		// vip.addMouseMotionListener(createMML());
@@ -117,7 +117,7 @@ public class UIHacks {
 		scrollP.paint(g);
 		g.dispose();
 
-		sip = new ImagePanel();
+		sip = new ImageComponent();
 		sip.setImage(si);
 
 		sC.add(sip);

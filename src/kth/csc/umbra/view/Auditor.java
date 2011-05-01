@@ -14,7 +14,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.MouseInputListener;
 
-import kth.vs.proto.ImagePanel;
+import kth.vs.proto.ImageComponent;
 
 /**
  * @author max.nordlund
@@ -23,7 +23,7 @@ import kth.vs.proto.ImagePanel;
 class Auditor implements CaretListener, KeyListener, MouseInputListener, MouseWheelListener {
 	private JTextArea text;
 
-	public Auditor(ImagePanel panel, JTextArea text) {
+	public Auditor(ImageComponent panel, JTextArea text) {
 		this.text = text;
 	}
 

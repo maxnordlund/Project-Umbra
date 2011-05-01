@@ -13,7 +13,7 @@ public class Window implements ComponentListener, MouseListener {
 	}
 
 	private JFrame frame;
-	private ImagePanel panel;
+	private ImageComponent panel;
 	private BufferedImage image;
 	private Graphics2D graphics;
 	private JTextArea text;
@@ -49,7 +49,7 @@ public class Window implements ComponentListener, MouseListener {
 		drawText(graphics);
 		graphics.dispose();
 
-		panel = new ImagePanel(image);
+		panel = new ImageComponent(image);
 
 		frame.add(panel);
 		frame.pack();

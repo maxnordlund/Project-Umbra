@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FontUIResource;
 
 import kth.csc.umbra.model.LimaProcurator;
-import kth.vs.proto.ImagePanel;
+import kth.vs.proto.ImageComponent;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -31,15 +31,15 @@ public class Despectatio {
 	private JTextArea text;
 	private LimaProcurator saveFile;
 	private final JScrollPane scroll;
-	private ImagePanel panel;
+	private ImageComponent imageComponent;
 	private JFrame hiddenFrame;
 	private Auditor relay;
 
 	public Despectatio(LimaProcurator saveFile) {
 		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
-				Font.ITALIC, 20));
+				Font.PLAIN, 20));
 
-		final Dimension preferredSize = new Dimension(300, 350);
+		final Dimension preferredSize = new Dimension(200, 200);
 		final int i = 5;
 
 		text = new JTextArea(5, 5);
@@ -59,56 +59,62 @@ public class Despectatio {
 		}
 
 		scroll = new JScrollPane(text);
-		scroll.setPreferredSize(preferredSize);
+		// scroll.setPreferredSize(preferredSize);
 
 		final JMenuBar menubar = makeMenuBar();
 
 		frame = new JFrame("Proposit Umbra");
-		// frame.setIgnoreRepaint(true);
-		// frame.createBufferStrategy(2);
-		// frame.setPreferredSize(secondarySize);
-		// frame.setMinimumSize(secondarySize);
-		frame.setResizable(false);
+		frame.setMinimumSize(preferredSize);
+		// frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menubar);
+		frame.pack();
 
 		hiddenFrame = makeHiddenFrame(scroll);
 
-		middleImage = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
-				BufferedImage.TYPE_INT_RGB);
+		rotatedImage = new BufferedImage(frame.getContentPane().getWidth(),
+				frame.getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
 
-		rotatedImage = new BufferedImage(middleImage.getHeight(),
-				middleImage.getWidth(), BufferedImage.TYPE_INT_RGB);
+		middleImage = new BufferedImage(rotatedImage.getHeight(),
+				rotatedImage.getWidth(), BufferedImage.TYPE_INT_RGB);
 
-		panel = new ImagePanel(rotatedImage);
-		panel.setFocusable(true);
+		scroll.setPreferredSize(new Dimension(middleImage.getWidth(),
+				middleImage.getWidth()));
 
-		frame.setContentPane(panel);
+		// scroll.setPreferredSize(new Dimension(500, 500));
+
+		hiddenFrame.pack();
+
+		imageComponent = new ImageComponent(rotatedImage);
+		imageComponent.setFocusable(true);
+
+		frame.setContentPane(imageComponent);
+		updateImage();
 		frame.pack();
 
-		relay = new Auditor(panel, scroll, text, this);
+		relay = new Auditor(imageComponent, scroll, text, frame, this);
 	}
 
 	/**
-	 * Displays the frame and initiates the update-loop.
+	 * Displays the frame.
 	 */
 	public void show() {
-
 		updateImage();
 		frame.setVisible(true);
-		// hiddenFrame.setVisible(true);
+//		hiddenFrame.setVisible(true);
 	}
 
 	public void updateImage() {
 		Graphics2D g2d = middleImage.createGraphics();
-//		scroll.paint(g2d);
+		// scroll.paint(g2d);
 		scroll.update(g2d);
+		
 		g2d.dispose();
 
 		rotateLeft(middleImage, rotatedImage);
-		
-		panel.repaint(100);
+
+		imageComponent.repaint(100);
 	}
 
 	private void rotateLeft(BufferedImage sourceImage,
@@ -121,10 +127,39 @@ public class Despectatio {
 		}
 	}
 
+	public void resize() {
+		// System.out.println(frame.getSize());
+		// System.out.println(frame.getContentPane().getSize());
+		recreateImages();
+		hiddenFrame.pack();
+		frame.pack();
+		updateImage();
+	}
+
+	private void recreateImages() {
+		rotatedImage = new BufferedImage(frame.getContentPane().getWidth(),
+				frame.getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
+
+		middleImage = new BufferedImage(rotatedImage.getHeight(),
+				rotatedImage.getWidth(), BufferedImage.TYPE_INT_RGB);
+
+		scroll.setPreferredSize(new Dimension(middleImage.getWidth(),
+				middleImage.getHeight()));
+
+		updateImage();
+
+		// imageComponent = new ImageComponent(rotatedImage);
+		imageComponent.setImage(rotatedImage);
+		// imageComponent.setFocusable(true);
+	}
+
+	private Dimension invert(Dimension d) {
+		return new Dimension(d.height, d.width);
+	}
+
 	private JFrame makeHiddenFrame(JScrollPane scroll) {
 		JFrame hiddenFrame = new JFrame("Hidden Window");
 		hiddenFrame.add(scroll);
-		hiddenFrame.pack();
 		return hiddenFrame;
 	}
 
@@ -132,7 +167,7 @@ public class Despectatio {
 	 * The created menubar contains: New-button, that creates a new file
 	 * Open-button, opens a dialog to find a file for editing Save-button, tries
 	 * to save a file, if no 'location' has been set a save dialog will ask you
-	 * to input one
+	 * to input one.
 	 * 
 	 * @return a menubar with basic buttons
 	 */
@@ -184,24 +219,22 @@ public class Despectatio {
 					}
 				});
 
-		/* final JButton help = makeButton("help.png", "[H]", "Shows the help dialog.",
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) { // TODO event
-						// StringBuilder sb = new StringBuilder(
-						// "Is your computer unable to export to pdf?");
-						// String s = sb.toString();
-						// JOptionPane.showMessageDialog(frame, s);
-					}
-				}); // */
+		/*
+		 * final JButton help = makeButton("help.png", "[H]",
+		 * "Shows the help dialog.", new ActionListener() {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) { // TODO event
+		 * // StringBuilder sb = new StringBuilder( //
+		 * "Is your computer unable to export to pdf?"); // String s =
+		 * sb.toString(); // JOptionPane.showMessageDialog(frame, s); } }); //
+		 */
 
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);
 		menubar.add(open);
 		menubar.add(save);
-//		menubar.add(help);
+		// menubar.add(help);
 		return menubar;
 	}
 

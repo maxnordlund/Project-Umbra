@@ -17,25 +17,27 @@ import javax.swing.text.BadLocationException;
  * @version 2011..
  */
 class Auditor implements CaretListener, KeyListener, MouseInputListener,
-		MouseWheelListener {
-	private ImagePanel imagePanel;
+		MouseWheelListener, ComponentListener {
+	private ImageComponent imageComponent;
 	private JScrollPane scroll;
 	private Despectatio despectatio;
 	private JTextArea text;
 
-	public Auditor(ImagePanel imagePanel, JScrollPane scroll, JTextArea text,
-			Despectatio despectatio) {
-		this.imagePanel = imagePanel;
+	public Auditor(ImageComponent imageComponent, JScrollPane scroll, JTextArea text,
+			JFrame frame, Despectatio despectatio) {
+		this.imageComponent = imageComponent;
 		this.scroll = scroll;
 		this.despectatio = despectatio;
 		this.text = text;
 
-		imagePanel.addMouseWheelListener(this);
-		imagePanel.addMouseListener(this);
-		imagePanel.addMouseMotionListener(this);
-		imagePanel.addKeyListener(this);
+		imageComponent.addMouseWheelListener(this);
+		imageComponent.addMouseListener(this);
+		imageComponent.addMouseMotionListener(this);
+		imageComponent.addKeyListener(this);
 
 		text.addCaretListener(this);
+		
+		frame.addComponentListener(this);
 	}
 
 	/**
@@ -46,7 +48,7 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 	private void translate(MouseEvent event) {
 		int x = event.getX();
 		int y = event.getY();
-		event.translatePoint(imagePanel.getHeight() - y - x, x - y);
+		event.translatePoint(imageComponent.getHeight() - y - x, x - y);
 	}
 
 	/*
@@ -61,11 +63,18 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 		// master.updateImage();
 	}
 
+	/**
+	 * Calls <code>translate(event)</code> to move the point to the correct
+	 * location relative the target JScrollPanel and JTextArea. The dispatches
+	 * the event to both. Lastly calls <code>despectatio.updateImage()</code>.
+	 * 
+	 * @param event
+	 */
 	private void processEvent(MouseEvent event) {
 		translate(event);
 		event.setSource(scroll);
 		scroll.dispatchEvent(event);
-		
+
 		event.setSource(text);
 		event.translatePoint(0, scroll.getVerticalScrollBar().getValue());
 		text.dispatchEvent(event);
@@ -204,5 +213,30 @@ class Auditor implements CaretListener, KeyListener, MouseInputListener,
 		// log(Integer.toString(e.getWheelRotation()));
 		scroll.dispatchEvent(e);
 		despectatio.updateImage();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		despectatio.resize();
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

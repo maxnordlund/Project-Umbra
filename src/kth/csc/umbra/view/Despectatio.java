@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import kth.csc.umbra.model.LimaProcurator;
-import kth.vs.proto.ImagePanel;
+import kth.vs.proto.ImageComponent;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -202,7 +202,7 @@ public class Despectatio {
 
 	private void generateTestWindow(BufferedImage image, int frameNumber) {
 		JFrame frame = new JFrame("Develpoment Window " + frameNumber);
-		ImagePanel ip = new ImagePanel(image);
+		ImageComponent ip = new ImageComponent(image);
 		frame.add(ip);
 		frame.pack();
 		frame.setVisible(true);
