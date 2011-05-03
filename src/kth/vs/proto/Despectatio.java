@@ -33,7 +33,6 @@ public class Despectatio {
 	private final JScrollPane scroll;
 	private ImageComponent imageComponent;
 	private JFrame hiddenFrame;
-	private Auditor relay;
 
 	public Despectatio(LimaProcurator saveFile) {
 		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
@@ -47,11 +46,6 @@ public class Despectatio {
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		text.setBorder(new EmptyBorder(i, i, i, i));
-		text.setText("اشقنئش سك عةش يثوى"
-				+ "\n\n\n\n\n\n\n\n\n\n\n\n有毒な書き方\n\n\n\n\n\n\n\n\n\n\n\n\n\nيثلاث");
-
-		// text.setUI(new UmbraIllusio(text));
-		// text.setFont(null);
 
 		this.saveFile = saveFile;
 		if (saveFile.hasLocation()) {
@@ -59,13 +53,13 @@ public class Despectatio {
 		}
 
 		scroll = new JScrollPane(text);
-		// scroll.setPreferredSize(preferredSize);
 
 		final JMenuBar menubar = makeMenuBar();
 
 		frame = new JFrame("Proposit Umbra");
 		frame.setMinimumSize(preferredSize);
-		// frame.setResizable(false);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setMaximumSize(new Dimension(screen.height, screen.width));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menubar);
@@ -73,16 +67,16 @@ public class Despectatio {
 
 		hiddenFrame = makeHiddenFrame(scroll);
 
-		rotatedImage = new BufferedImage(frame.getContentPane().getWidth(),
-				frame.getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
+		final Container contentPane = frame.getContentPane();
+		final int width = contentPane.getWidth();
+		final int height = contentPane.getHeight();
+		rotatedImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
 
-		middleImage = new BufferedImage(rotatedImage.getHeight(),
-				rotatedImage.getWidth(), BufferedImage.TYPE_INT_RGB);
+		middleImage = new BufferedImage(height, width,
+				BufferedImage.TYPE_INT_RGB);
 
-		scroll.setPreferredSize(new Dimension(middleImage.getWidth(),
-				middleImage.getWidth()));
-
-		// scroll.setPreferredSize(new Dimension(500, 500));
+		scroll.setPreferredSize(new Dimension(width, height));
 
 		hiddenFrame.pack();
 
@@ -90,10 +84,9 @@ public class Despectatio {
 		imageComponent.setFocusable(true);
 
 		frame.setContentPane(imageComponent);
-		updateImage();
 		frame.pack();
 
-		relay = new Auditor(imageComponent, scroll, text, frame, this);
+		new Auditor(imageComponent, scroll, text, frame, this);
 	}
 
 	/**
@@ -102,14 +95,13 @@ public class Despectatio {
 	public void show() {
 		updateImage();
 		frame.setVisible(true);
-//		hiddenFrame.setVisible(true);
+		// hiddenFrame.setVisible(true);
 	}
 
 	public void updateImage() {
 		Graphics2D g2d = middleImage.createGraphics();
-		// scroll.paint(g2d);
 		scroll.update(g2d);
-		
+
 		g2d.dispose();
 
 		rotateLeft(middleImage, rotatedImage);
@@ -143,14 +135,10 @@ public class Despectatio {
 		middleImage = new BufferedImage(rotatedImage.getHeight(),
 				rotatedImage.getWidth(), BufferedImage.TYPE_INT_RGB);
 
-		scroll.setPreferredSize(new Dimension(middleImage.getWidth(),
-				middleImage.getHeight()));
+		scroll.setPreferredSize(new Dimension(rotatedImage.getHeight(),
+				rotatedImage.getWidth()));
 
-		updateImage();
-
-		// imageComponent = new ImageComponent(rotatedImage);
 		imageComponent.setImage(rotatedImage);
-		// imageComponent.setFocusable(true);
 	}
 
 	private Dimension invert(Dimension d) {

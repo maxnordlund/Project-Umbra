@@ -12,9 +12,10 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FontUIResource;
 
 import kth.csc.umbra.model.LimaProcurator;
-import kth.vs.proto.ImageComponent;
+import kth.csc.umbra.view.ImageComponent;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -22,16 +23,23 @@ import kth.vs.proto.ImageComponent;
  * 
  * @author Max Nordlund
  * @author Oskar Segersvärd
+ * @version 2011.05.03
  */
 public class Despectatio {
 	private JFrame frame;
+	private BufferedImage middleImage;
+	private BufferedImage rotatedImage;
 	private JTextArea text;
 	private LimaProcurator saveFile;
 	private final JScrollPane scroll;
-	private BufferedImage image;
+	private ImageComponent imageComponent;
+	private JFrame hiddenFrame;
 
 	public Despectatio(LimaProcurator saveFile) {
-		final Dimension preferredSize = new Dimension(300, 350);
+		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
+				Font.PLAIN, 20));
+
+		final Dimension preferredSize = new Dimension(200, 200);
 		final int i = 5;
 
 		text = new JTextArea(5, 5);
@@ -39,11 +47,6 @@ public class Despectatio {
 		text.setWrapStyleWord(true);
 		text.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		text.setBorder(new EmptyBorder(i, i, i, i));
-		text.setText("اشقنئش سك عةش يثوى"
-				+ "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNakanaka!");
-
-		// text.setUI(new UmbraIllusio(text));
-		// text.setFont(null);
 
 		this.saveFile = saveFile;
 		if (saveFile.hasLocation()) {
@@ -51,39 +54,132 @@ public class Despectatio {
 		}
 
 		scroll = new JScrollPane(text);
-		scroll.setPreferredSize(preferredSize);
 
 		final JMenuBar menubar = makeMenuBar();
 
 		frame = new JFrame("Proposit Umbra");
-		// frame.setIgnoreRepaint(true);
-		// frame.createBufferStrategy(2);
-		// frame.setPreferredSize(secondarySize);
-		// frame.setMinimumSize(secondarySize);
-		frame.setResizable(false);
+		frame.setMinimumSize(preferredSize);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setMaximumSize(new Dimension(screen.height, screen.width));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menubar);
-		frame.setContentPane(scroll);
-
 		frame.pack();
 
-		supportImages();
+		hiddenFrame = makeHiddenFrame(scroll);
+
+		final Container contentPane = frame.getContentPane();
+		final int width = contentPane.getWidth();
+		final int height = contentPane.getHeight();
+		rotatedImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
+
+		middleImage = new BufferedImage(height, width,
+				BufferedImage.TYPE_INT_RGB);
+
+		scroll.setPreferredSize(new Dimension(width, height));
+
+		hiddenFrame.pack();
+
+		imageComponent = new ImageComponent(rotatedImage);
+		imageComponent.setFocusable(true);
+
+		frame.setContentPane(imageComponent);
+		frame.pack();
+
+		new Auditor(imageComponent, scroll, text, frame, this);
+	}
+
+	/**
+	 * Displays the frame.
+	 */
+	public void show() {
+		updateImage();
+		frame.setVisible(true);
+		// hiddenFrame.setVisible(true);
+	}
+
+	/**
+	 * Redraws the displayed image, by painting the <code>JScrollPane</code> to
+	 * a BufferedImage and rotating.
+	 */
+	public void updateImage() {
+		Graphics2D g2d = middleImage.createGraphics();
+		scroll.update(g2d);
+		g2d.dispose();
+
+		rotateLeft(middleImage, rotatedImage);
+
+		imageComponent.paintImmediately(0, 0, imageComponent.width,
+				imageComponent.height);
 
 	}
 
 	/**
-	 * Displays the frame and initiates the update-loop.
+	 * Rotates a BufferedImage pixel by pixel to another BufferedImage with
+	 * inverted size.
+	 * 
+	 * @param sourceImage
+	 * @param targetImage
 	 */
-	public void show() {
-		frame.setVisible(true);
+	private void rotateLeft(BufferedImage sourceImage,
+			BufferedImage generatedImage) {
+		for (int i = 0; i < sourceImage.getHeight(); i++) {
+			for (int j = 0; j < sourceImage.getWidth(); j++) {
+				generatedImage.setRGB(i, sourceImage.getWidth() - (j + 1),
+						sourceImage.getRGB(j, i));
+			}
+		}
+	}
+
+	/**
+	 * Is called when the <code>frame</code> is resized. Recreates the images
+	 * and JScrollPane to fit the new size of the window packs the windows and
+	 * makes a call to <code>updateImage()</code>.
+	 */
+	public void resize() {
+		recreateImages();
+		hiddenFrame.pack();
+		frame.pack();
+		updateImage();
+	}
+
+	/**
+	 * Creates new BufferedImages to be displayed according to the current frame
+	 * size.
+	 */
+	private void recreateImages() {
+		final Container contentPane = frame.getContentPane();
+		final int width = contentPane.getWidth();
+		final int height = contentPane.getHeight();
+		rotatedImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
+
+		middleImage = new BufferedImage(height, width,
+				BufferedImage.TYPE_INT_RGB);
+
+		scroll.setPreferredSize(new Dimension(height, width));
+
+		imageComponent.setImage(rotatedImage);
+	}
+
+	/**
+	 * Creates a frame to house the JScrollPane.
+	 * 
+	 * @param scroll
+	 * @return the hidden frame
+	 */
+	private JFrame makeHiddenFrame(JScrollPane scroll) {
+		JFrame hiddenFrame = new JFrame("Hidden Window");
+		hiddenFrame.add(scroll);
+		return hiddenFrame;
 	}
 
 	/**
 	 * The created menubar contains: New-button, that creates a new file
 	 * Open-button, opens a dialog to find a file for editing Save-button, tries
 	 * to save a file, if no 'location' has been set a save dialog will ask you
-	 * to input one
+	 * to input one.
 	 * 
 	 * @return a menubar with basic buttons
 	 */
@@ -135,29 +231,11 @@ public class Despectatio {
 					}
 				});
 
-		final JButton help = makeButton("save.png", "[H]",
-				"Shows the help dialog.", new ActionListener() { // Cannot
-																	// handle
-																	// null as
-																	// image
-																	// path!
-
-					@Override
-					public void actionPerformed(ActionEvent e) { // TODO event
-						supportImages();
-						// StringBuilder sb = new StringBuilder(
-						// "Is your computer unable to export to pdf?");
-						// String s = sb.toString();
-						// JOptionPane.showMessageDialog(frame, s);
-					}
-				}); //
-
 		final JMenuBar menubar = new JMenuBar();
 		menubar.setName("menubar");
 		menubar.add(newFile);
 		menubar.add(open);
 		menubar.add(save);
-		menubar.add(help);
 		return menubar;
 	}
 
@@ -169,9 +247,9 @@ public class Despectatio {
 	 */
 	private static JButton makeButton(String path, String desc, String tooltip,
 			ActionListener listner) {
+		final JButton button;
 		Icon icon = getIcon(path);
 
-		final JButton button;
 		if (icon == null) {
 			button = new JButton(desc);
 		} else {
@@ -180,6 +258,7 @@ public class Despectatio {
 
 		button.setToolTipText(tooltip);
 		button.addActionListener(listner);
+		button.setFocusable(false);
 
 		return button;
 	}
@@ -196,43 +275,6 @@ public class Despectatio {
 				"Text files", "txt");
 		chooser.setFileFilter(filter);
 		return chooser;
-	}
-
-	// Recently added prototype code
-
-	private void generateTestWindow(BufferedImage image, int frameNumber) {
-		JFrame frame = new JFrame("Develpoment Window " + frameNumber);
-		ImageComponent ip = new ImageComponent(image);
-		frame.add(ip);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	private void supportImages() {
-		image = new BufferedImage(scroll.getWidth(), scroll.getHeight(),
-				BufferedImage.TYPE_INT_RGB);
-		Graphics2D secondary = image.createGraphics();
-		scroll.paint(secondary);
-		secondary.dispose();
-
-		generateTestWindow(image, 1);
-
-		BufferedImage rotatedImage = new BufferedImage(image.getHeight(),
-				image.getWidth(), BufferedImage.TYPE_INT_RGB);
-
-		rotateLeft(image, rotatedImage);
-
-		generateTestWindow(rotatedImage, 2);
-	}
-
-	private void rotateLeft(BufferedImage sourceImage,
-			BufferedImage generatedImage) {
-		for (int i = 0; i < sourceImage.getHeight(); i++) {
-			for (int j = 0; j < sourceImage.getWidth(); j++) {
-				generatedImage.setRGB(i, sourceImage.getWidth() - (j + 1),
-						sourceImage.getRGB(j, i));
-			}
-		}
 	}
 
 }
