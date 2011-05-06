@@ -138,7 +138,7 @@ public class UIHacks {
 		vF.setVisible(true);
 	}
 
-	private MouseListener createML() {
+	MouseListener createML() {
 		MouseListener ml = new MouseListener() {
 
 			@Override
@@ -175,7 +175,7 @@ public class UIHacks {
 		return ml;
 	}
 
-	private MouseMotionListener createMML() {
+	MouseMotionListener createMML() {
 		MouseMotionListener mml = new MouseMotionListener() {
 
 			@Override

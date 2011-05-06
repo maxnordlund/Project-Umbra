@@ -6,16 +6,23 @@ package kth.csc.umbra.view;
 import static kth.csc.umbra.model.LimaProcurator.*;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FontUIResource;
 
 import kth.csc.umbra.model.LimaProcurator;
-import kth.csc.umbra.view.ImageComponent;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -36,8 +43,12 @@ public class Despectatio {
 	private JFrame hiddenFrame;
 
 	public Despectatio(LimaProcurator saveFile) {
-		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
-				Font.PLAIN, 20));
+		UIManager
+				.put("TextArea.font",
+						new FontUIResource(getFont("DigitalLinescapeRunic.ttf",
+								16.0f)));
+//		UIManager.put("TextArea.font", new FontUIResource(Font.MONOSPACED,
+//				Font.PLAIN, 20));
 
 		final Dimension preferredSize = new Dimension(200, 200);
 		final int i = 5;

@@ -3,14 +3,20 @@
  */
 package kth.vs.proto;
 
-import static kth.csc.umbra.model.LimaProcurator.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.MouseInputListener;
 
 /**
  * @author max.nordlund

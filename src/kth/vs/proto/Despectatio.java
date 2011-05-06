@@ -3,19 +3,32 @@
  */
 package kth.vs.proto;
 
-import static kth.csc.umbra.model.LimaProcurator.*;
+import static kth.csc.umbra.model.LimaProcurator.getIcon;
+import static kth.csc.umbra.model.LimaProcurator.log;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.ComponentOrientation;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FontUIResource;
 
 import kth.csc.umbra.model.LimaProcurator;
-import kth.vs.proto.ImageComponent;
 
 /**
  * Despectatio is the main class the GraphicUserInterface, and handles all tasks
@@ -141,7 +154,7 @@ public class Despectatio {
 		imageComponent.setImage(rotatedImage);
 	}
 
-	private Dimension invert(Dimension d) {
+	Dimension invert(Dimension d) {
 		return new Dimension(d.height, d.width);
 	}
 

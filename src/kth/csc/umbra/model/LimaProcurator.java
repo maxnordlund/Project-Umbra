@@ -3,6 +3,8 @@
  */
 package kth.csc.umbra.model;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Scanner;
@@ -18,15 +20,22 @@ import javax.swing.ImageIcon;
  * @author Max Nordlund
  * @version 2011.04.14
  */
+/**
+ * @author max.nordlund
+ * @version 2011..
+ */
 public class LimaProcurator {
 	private File location;
 
+	/**
+	 * Creates a file manager without a file path.
+	 */
 	public LimaProcurator() {
 		this.location = null;
 	}
 
 	/**
-	 * Sets the file path to the input String.
+	 * Creates a file manager with the supplied file path.
 	 * 
 	 * @param file
 	 *            path
@@ -136,7 +145,7 @@ public class LimaProcurator {
 	 */
 	@Override
 	public String toString() {
-		if(location == null) {
+		if (location == null) {
 			return "";
 		}
 		return location.toString();
@@ -183,6 +192,13 @@ public class LimaProcurator {
 		return returnObject;
 	}
 
+	/**
+	 * Gets an icon from the file at the supplied path.
+	 * 
+	 * @param path
+	 *            The path to the file to read.
+	 * @return The icon found or if no icon found, <code>null</code>.
+	 */
 	public static Icon getIcon(String path) {
 		return (Icon) getResource(path, new LimaInputiActio() {
 			@Override
@@ -192,11 +208,36 @@ public class LimaProcurator {
 					return null;
 				}
 				BufferedImage img = ImageIO.read(input);
-				if(img == null) {
+				if (img == null) {
 					return null;
 				}
 				icon = new ImageIcon(img);
 				return icon;
+			}
+		});
+	}
+
+	/**
+	 * Gets a font from the file at the supplied path.
+	 * 
+	 * @param path
+	 *            The path to the file to read.
+	 * @param size
+	 *            The size of the font sought in points.
+	 * @return The font found or if no font found, <code>null</code>.
+	 */
+	public static Font getFont(String path, final float size) {
+		return (Font) getResource(path, new LimaInputiActio() {
+			@Override
+			public Object act(InputStream input) throws IOException {
+				Font font = null;
+				try {
+					font = Font.createFont(Font.TRUETYPE_FONT, input);
+					font = font.deriveFont(size);
+				} catch (FontFormatException e) {
+					log(e);
+				}
+				return font;
 			}
 		});
 	}
